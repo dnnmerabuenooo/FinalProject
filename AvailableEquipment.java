@@ -1,72 +1,134 @@
+
 import java.awt.EventQueue;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.MatteBorder;
+import java.awt.Color;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
+import java.awt.Font;
 
 public class AvailableEquipment extends JFrame {
 
-	private JPanel contentPane;
+    private JPanel contentPane;
+    private JTable table;
+    private DefaultTableModel tableModel;
+    private JLabel availEqPic;
+    private JLabel adminBackBtn;
+    private JLabel addEq;
+    private JLabel reportLabel;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AvailableEquipment frame = new AvailableEquipment();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    AvailableEquipment frame = new AvailableEquipment();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	/**
-	 * Create the frame.
-	 */
-	public AvailableEquipment() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 600);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    private void loadEquipmentData() {
+        try (BufferedReader br = new BufferedReader(new FileReader("Equipments.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length == 2) {
+                    String equipment = data[0].trim();
+                    String quantity = data[1].trim();
+                    tableModel.addRow(new Object[]{equipment, quantity});
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel availableeqPic = new JLabel("");
-		availableeqPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\AvailableEquipment.png"));
-		availableeqPic.setBounds(0, 0, 984, 561);
-		contentPane.add(availableeqPic);
-		
-		JLabel adminChoice = new JLabel("");
-		adminChoice.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				AdminPage adminPage = new AdminPage();
-				adminPage.setVisible(true);
+    public AvailableEquipment() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1000, 600);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(87, 164, 808, 344);
+        contentPane.add(scrollPane);
+
+        table = new JTable();
+        table.setBackground(new Color(255, 255, 153));
+        table.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
+        tableModel = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Equipment", "Quantity"}
+        );
+        table.setModel(tableModel);
+        scrollPane.setViewportView(table);
+        
+        availEqPic = new JLabel("");
+        availEqPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\availEq.png"));
+        availEqPic.setBounds(0, 0, 1000, 600);
+        contentPane.add(availEqPic);
+        
+        adminBackBtn = new JLabel("");
+        adminBackBtn.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		AdminPage AdmPg = new AdminPage();
+				AdmPg.setVisible(true);
 				dispose();
-			}
-		});
-		adminChoice.setBounds(834, 0, 92, 29);
-		contentPane.add(adminChoice);
-		
-		JLabel logout = new JLabel("");
-		logout.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+        	}
+        });
+        adminBackBtn.setBounds(838, 11, 89, 37);
+        contentPane.add(adminBackBtn);
+        
+        addEq = new JLabel("");
+        addEq.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		AddEquipment adminAdd = new AddEquipment();
+				adminAdd.setVisible(true);
 				dispose();
-			}
-		});
-		logout.setBounds(949, 0, 35, 23);
-		contentPane.add(logout);
-	}
+        	}
+        });
+        addEq.setBounds(22, 547, 228, 14);
+        contentPane.add(addEq);
+        
+        reportLabel = new JLabel("");
+        reportLabel.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		Records records = new Records();
+				records.setVisible(true);
+				dispose();
+        	}
+        });
+        reportLabel.setBounds(442, 26, 246, 37);
+        contentPane.add(reportLabel);
 
+        loadEquipmentData(); // Load equipment data from file
+    }
 }
-
