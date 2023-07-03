@@ -1,3 +1,4 @@
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -7,10 +8,24 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
+import java.io.BufferedWriter;
+
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Font;
+import java.awt.Color;
 
 public class ViewEquipment extends JFrame {
 
 	private JPanel contentPane;
+	private JTable table;
+	private DefaultTableModel tableModel;
 
 	/**
 	 * Launch the application.
@@ -27,6 +42,22 @@ public class ViewEquipment extends JFrame {
 			}
 		});
 	}
+	
+	 private void loadEquipmentData() {
+	        try (BufferedReader br = new BufferedReader(new FileReader("Equipments.txt"))) {
+	            String line;
+	            while ((line = br.readLine()) != null) {
+	                String[] data = line.split(",");
+	                if (data.length == 2) {
+	                    String equipment = data[0].trim();
+	                    String quantity = data[1].trim();
+	                    tableModel.addRow(new Object[]{equipment, quantity});
+	                }
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
 
 	/**
 	 * Create the frame.
@@ -40,31 +71,37 @@ public class ViewEquipment extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel vieweqPic = new JLabel("");
-		vieweqPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\ViewEquipment.png"));
-		vieweqPic.setBounds(0, 0, 984, 561);
-		contentPane.add(vieweqPic);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(77, 231, 816, 304);
+		contentPane.add(scrollPane);
 		
-		JLabel userChoice = new JLabel("");
-		userChoice.addMouseListener(new MouseAdapter() {
+		table = new JTable();
+        table.setBackground(new Color(83, 172, 85));
+        table.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
+        tableModel = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Equipment", "Quantity"}
+        );
+        table.setModel(tableModel);
+        scrollPane.setViewportView(table);
+		
+		JLabel viewEq = new JLabel("");
+		viewEq.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\viewEq.png"));
+		viewEq.setBounds(0, 0, 1000, 600);
+		contentPane.add(viewEq);
+		
+		JLabel rentBtn = new JLabel("");
+		rentBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				UserPage userPage = new UserPage();
-				userPage.setVisible(true);
+				Rent rent = new Rent();
+				rent.setVisible(true);
 				dispose();
 			}
 		});
-		userChoice.setBounds(833, 0, 89, 26);
-		contentPane.add(userChoice);
+		rentBtn.setBounds(191, 67, 257, 42);
+		contentPane.add(rentBtn);
 		
-		JLabel userExit = new JLabel("");
-		userExit.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				dispose();
-			}
-		});
-		userExit.setBounds(950, 0, 34, 26);
-		contentPane.add(userExit);
+		 loadEquipmentData(); // Load equipment data from file
 	}
 }
