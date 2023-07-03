@@ -1,0 +1,6 @@
+Tables,100
+Volleyball,6
+Basketball,7
+Chairs,300
+Basketball Court,1
+Multi-Purpose Hall,1
