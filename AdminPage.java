@@ -1,3 +1,4 @@
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -5,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,75 +35,60 @@ public class AdminPage extends JFrame {
 	 */
 	public AdminPage() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 600);
+		setBounds(100, 100, 1000, 630);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel adminpagePic = new JLabel("");
-		adminpagePic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\AdminPage.png"));
-		adminpagePic.setBounds(0, 0, 984, 561);
-		contentPane.add(adminpagePic);
+		JLabel adminPagePic = new JLabel("");
+		adminPagePic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\adminPage.png"));
+		adminPagePic.setBounds(0, 0, 1000, 600);
+		contentPane.add(adminPagePic);
 		
-		JLabel addeqBtn = new JLabel("New label");
-		addeqBtn.addMouseListener(new MouseAdapter() {
-			@Override
+		JLabel AddEBtn = new JLabel("");
+		AddEBtn.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				AddEquipment addEquipment = new AddEquipment();
-				addEquipment.setVisible(true);
+				AddEquipment adminAdd = new AddEquipment();
+				adminAdd.setVisible(true);
 				dispose();
 			}
 		});
-		addeqBtn.setBounds(805, 62, 169, 42);
-		contentPane.add(addeqBtn);
+		AddEBtn.setBounds(809, 80, 165, 42);
+		contentPane.add(AddEBtn);
 		
-		JLabel availableeqBtn = new JLabel("New label");
-		availableeqBtn.addMouseListener(new MouseAdapter() {
-			@Override
+		JLabel AvailEBtn = new JLabel("");
+		AvailEBtn.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				AvailableEquipment availableEquipment = new AvailableEquipment();
-				availableEquipment.setVisible(true);
+				AvailableEquipment avail = new AvailableEquipment();
+				avail.setVisible(true);
 				dispose();
 			}
 		});
-		availableeqBtn.setBounds(805, 134, 169, 42);
-		contentPane.add(availableeqBtn);
+		AvailEBtn.setBounds(809, 155, 165, 42);
+		contentPane.add(AvailEBtn);
 		
-		JLabel recordsBtn = new JLabel("New label");
-		recordsBtn.addMouseListener(new MouseAdapter() {
-			@Override
+		JLabel ViewReportBtn = new JLabel("");
+		ViewReportBtn.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				Records records = new Records();
-				records.setVisible(true);
+				Records adminRecords = new Records();
+				adminRecords.setVisible(true);
 				dispose();
 			}
 		});
-		recordsBtn.setBounds(805, 205, 169, 42);
-		contentPane.add(recordsBtn);
+		ViewReportBtn.setBounds(809, 224, 165, 42);
+		contentPane.add(ViewReportBtn);
 		
-		JLabel adminlogoutBtn = new JLabel("");
-		adminlogoutBtn.addMouseListener(new MouseAdapter() {
-			@Override
+		JLabel AdminLogout = new JLabel("");
+		AdminLogout.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				HomePage home = new HomePage();
 				home.setVisible(true);
 				dispose();
 			}
 		});
-		adminlogoutBtn.setBounds(894, 547, 90, 14);
-		contentPane.add(adminlogoutBtn);
-		
-		JLabel logout = new JLabel("");
-		logout.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				dispose();
-			}
-		});
-		logout.setBounds(955, 0, 29, 22);
-		contentPane.add(logout);
+		AdminLogout.setBounds(894, 566, 90, 25);
+		contentPane.add(AdminLogout);
 	}
-
 }
