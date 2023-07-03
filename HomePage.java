@@ -1,3 +1,4 @@
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -5,10 +6,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class HomePage extends JFrame {
 
@@ -43,32 +43,37 @@ public class HomePage extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel HomePagePic = new JLabel("");
-		HomePagePic.setBounds(0, 0, 984, 561);
-		HomePagePic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\HomePage.png"));
+		HomePagePic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\homePage.png"));
+		HomePagePic.setBounds(0, 0, 1000, 600);
 		contentPane.add(HomePagePic);
 		
-		JLabel adminBtn = new JLabel("");
-		adminBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		JButton adminBtn = new JButton("");
+		adminBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				AdminLogin adminLogin = new AdminLogin();
 				adminLogin.setVisible(true);
 				dispose();
 			}
 		});
-		adminBtn.setBounds(57, 483, 137, 43);
+		adminBtn.setBounds(57, 506, 132, 44);
+		adminBtn.setOpaque(false);
+		adminBtn.setContentAreaFilled(false);
+		adminBtn.setBorderPainted(false);
 		contentPane.add(adminBtn);
 		
-		JLabel userBtn = new JLabel("");
-		userBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		JButton userBtn = new JButton("");
+		userBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				UserLogin userLogin = new UserLogin();
 				userLogin.setVisible(true);
 				dispose();
 			}
 		});
-		userBtn.setBounds(291, 483, 137, 43);
+		userBtn.setBounds(292, 506, 132, 44);
+		userBtn.setOpaque(false);
+		userBtn.setContentAreaFilled(false);
+		userBtn.setBorderPainted(false);
 		contentPane.add(userBtn);
 	}
+
 }
