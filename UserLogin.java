@@ -1,8 +1,5 @@
+
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,13 +8,22 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+import java.awt.Font;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
+
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class UserLogin extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField name;
-	private JTextField address;
-	private JTextField number;
+	private JTextField nameUser;
+	private JTextField addressUser;
+	private JTextField mobileNumber;
+	private JButton loginBtn;
 
 	/**
 	 * Launch the application.
@@ -38,6 +44,21 @@ public class UserLogin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	
+	private void UserPage(String name, String address, String phone) {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("Information.txt", true));
+			writer.write( name + " , " + address + " , " + phone);
+			writer.newLine();
+			writer.close();
+			
+			JOptionPane.showMessageDialog(null, "Successfully Login");
+		} catch (IOException ex) {
+			JOptionPane.showMessageDialog(null, "Invalid Credentials");
+			ex.printStackTrace();
+			
+		}
+	}
 	public UserLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 600);
@@ -47,15 +68,49 @@ public class UserLogin extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel userloginBtn = new JLabel("");
-		userloginBtn.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				String phonenumber = number.getText();
+		nameUser = new JTextField();
+		nameUser.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		nameUser.setBounds(322, 236, 439, 28);
+		nameUser.setBackground(null);
+		nameUser.setBorder(null);
+		nameUser.setOpaque(false);
+		contentPane.add(nameUser);
+		nameUser.setColumns(10);
+		
+		addressUser = new JTextField();
+		addressUser.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		addressUser.setBounds(322, 291, 445, 34);
+		addressUser.setBackground(null);
+		addressUser.setBorder(null);
+		addressUser.setOpaque(false);
+		contentPane.add(addressUser);
+		addressUser.setColumns(10);
+		
+		mobileNumber = new JTextField();
+		mobileNumber.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		mobileNumber.setBounds(322, 346, 445, 34);
+		mobileNumber.setBackground(null);
+		mobileNumber.setBorder(null);
+		mobileNumber.setOpaque(false);
+		contentPane.add(mobileNumber);
+		mobileNumber.setColumns(10);
+		
+		JLabel userLoginPic = new JLabel("");
+		userLoginPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\userLogin.png"));
+		userLoginPic.setBounds(0, 0, 1000, 600);
+		contentPane.add(userLoginPic);
+		
+		loginBtn = new JButton("");
+		loginBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = nameUser.getText();
+				String addr = addressUser.getText();
+				String phone = mobileNumber.getText();
 				
-				if (phonenumber.startsWith("09") && (phonenumber.length() == 11)) {
-					JOptionPane.showMessageDialog(null, "Login Successful!");
-					UserPage userPage = new UserPage();
-					userPage.setVisible(true);
+				if (phone.startsWith("09") && phone.length() == 11) {
+					UserPage(name, addr, phone);
+					ViewEquipment viewEq = new ViewEquipment();
+					viewEq.setVisible(true);
 					dispose();
 				} else {
 					JOptionPane.showMessageDialog(null, "Invalid phone number. Please enter a valid 11-digit number starting with '09'.");
@@ -64,40 +119,11 @@ public class UserLogin extends JFrame {
 				
 			}
 		});
-		userloginBtn.setBounds(454, 398, 120, 41);
-		contentPane.add(userloginBtn);
-		
-		name = new JTextField();
-		name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		name.setBackground(null);
-		name.setBorder(null);
-		name.setOpaque(false);
-		name.setBounds(321, 214, 446, 32);
-		contentPane.add(name);
-		name.setColumns(10);
-		
-		address = new JTextField();
-		address.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		address.setBackground(null);
-		address.setBorder(null);
-		address.setOpaque(false);
-		address.setBounds(321, 271, 446, 32);
-		contentPane.add(address);
-		address.setColumns(10);
-		
-		number = new JTextField();
-		number.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		number.setBackground(null);
-		number.setBorder(null);
-		number.setOpaque(false);
-		number.setBounds(321, 327, 446, 32);
-		contentPane.add(number);
-		number.setColumns(10);
-		
-		JLabel userloginPic = new JLabel("");
-		userloginPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\UserLogin.png"));
-		userloginPic.setBounds(0, 0, 984, 561);
-		contentPane.add(userloginPic);
+		loginBtn.setBounds(461, 417, 105, 41);
+		loginBtn.setOpaque(false);
+		loginBtn.setContentAreaFilled(false);
+		loginBtn.setBorderPainted(false);
+		contentPane.add(loginBtn);
 	}
 
 }
