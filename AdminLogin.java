@@ -1,22 +1,30 @@
+
 import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
+import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AdminLogin extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField adminUsername;
-	private JPasswordField adminPassword;
+	private JPasswordField PasswordInput;
+	private JTextField UsernameInput;
+	private JLabel AdminLoginExit;
+	private JButton adminLoginBtn;
 
 	/**
 	 * Launch the application.
@@ -25,7 +33,7 @@ public class AdminLogin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminLogin frame = new AdminLogin();
+					AdminPage frame = new AdminPage();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,65 +54,82 @@ public class AdminLogin extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel adminloginBtn = new JLabel("");
+		UsernameInput = new JTextField();
+		UsernameInput.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		UsernameInput.setBounds(310, 250, 506, 43);
+		UsernameInput.setBackground(null);
+		UsernameInput.setBorder(null);
+		UsernameInput.setOpaque(false);
+		contentPane.add(UsernameInput);
+		UsernameInput.setColumns(10);
+		
+		PasswordInput = new JPasswordField();
+		PasswordInput.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		PasswordInput.setBackground(null);
+		PasswordInput.setBorder(null);
+		PasswordInput.setOpaque(false);
+		PasswordInput.setBounds(310, 336, 493, 43);
+		contentPane.add(PasswordInput);
+		PasswordInput.setColumns(10);
+		
+		JLabel adminLoginPic = new JLabel("");
+		adminLoginPic.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		adminLoginPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\adminLogin.png"));
+		adminLoginPic.setBounds(0, 0, 1000, 600);
+		contentPane.add(adminLoginPic);
+		
         
-		adminloginBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				String username = adminUsername.getText();
-				String password = String.valueOf(adminPassword.getPassword());
-		        
-				if(username.equals("Admin1") && password.equals("123"))
-	             {
-					JOptionPane.showMessageDialog(null, "Login Successful!");
-					AdminPage adminPage = new AdminPage();
-					adminPage.setVisible(true);
-					dispose();
-	             }
-				else if(username.equals("") && password.equals("")) 
-	             {
-	                 JOptionPane.showMessageDialog( null, "Please enter your username and password.");
-	             }
-	             else if(!username.equals("Admin1") && password.equals("123")) 
-	             {
-	                 JOptionPane.showMessageDialog( null, "Incorrect username.");
-	             }
-	             else if(username.equals("Admin1") && !password.equals("123")) 
-	             {
-	                 JOptionPane.showMessageDialog( null, "Incorrect password.");
-	             }
-	             else
-	             {
-	                 JOptionPane.showMessageDialog( null, "Incorrect username and password.");
-	             }};
+		adminLoginBtn = new JButton("");
+		
+		adminLoginBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+	                
+				
+				boolean userExists = false; 
+				
+				String UserInput = UsernameInput.getText();
+		        String PassInput = new String(PasswordInput.getPassword());
+		        String[] username = {"Admin1"};
+                String[] password = {"123"};
+                
+                   for (int i = 0; i < password.length; i++) {
+                	
+                	
+					if (UserInput.equals("Admin1") && PassInput.equals("123")) {
+						JOptionPane.showMessageDialog(null, "Login successful!");
+                        AdminPage AdmPg = new AdminPage();
+                        AdmPg.setVisible(true);
+                        new AdminPage();
+                        dispose();
+                        userExists = true;
+                        break;
+                  
+                    } 
+					else if (!UserInput.equals("Admin1") && PassInput.equals("123")) {
+                        JOptionPane.showMessageDialog(null, "Incorrect username.");
+                    }
+					else if (UserInput.equals("Admin1") && !PassInput.equals("123")) {
+                        JOptionPane.showMessageDialog(null, "Incorrect password.");	
+                }
+					else {
+						JOptionPane.showMessageDialog(null, "Incorrect username and password.");
+					}
+                   }
 			}
-		);
-
-		adminloginBtn.setBounds(456, 412, 118, 44);
-		contentPane.add(adminloginBtn);
+        });
+		adminLoginBtn.setBounds(462, 436, 104, 34);
+		adminLoginBtn.setOpaque(false);
+		adminLoginBtn.setContentAreaFilled(false);
+		adminLoginBtn.setBorderPainted(false);
+		contentPane.add(adminLoginBtn);
 		
-		adminUsername = new JTextField();
-		adminUsername.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		adminUsername.setBackground(null);
-		adminUsername.setBorder(null);
-		adminUsername.setOpaque(false);
-		adminUsername.setBounds(310, 229, 507, 44);
-		contentPane.add(adminUsername);
-		adminUsername.setColumns(10);
-		
-		
-		adminPassword = new JPasswordField();
-		adminPassword.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		adminPassword.setBackground(null);
-		adminPassword.setBorder(null);
-		adminPassword.setOpaque(false);
-		adminPassword.setBounds(310, 315, 497, 44);
-		contentPane.add(adminPassword);
-		
-		JLabel adminloginPic = new JLabel("");
-		adminloginPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\AdminLogin.png"));
-		adminloginPic.setBounds(0, 0, 984, 561);
-		contentPane.add(adminloginPic);
+		AdminLoginExit = new JLabel("");
+		AdminLoginExit.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+			}
+		});
+		AdminLoginExit.setBounds(151, 109, 26, 26);
+		contentPane.add(AdminLoginExit);
 	}
 }
-
