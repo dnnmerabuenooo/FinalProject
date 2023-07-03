@@ -1,157 +1,224 @@
+
+
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JTextField;
-import javax.swing.JTable;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import java.awt.Color;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.border.MatteBorder;
 
 public class AddEquipment extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField equipment;
-	private JTextField quantity;
-	private JTable table;
-	DefaultTableModel model;
+    private JPanel contentPane;
+    private JTextField EqType;
+    private JTextField NoOfEq;
+    private JTable table;
+    private JScrollPane scrollPane;
+    private DefaultTableModel model;
+    private JButton EditBtn;
+    private JLabel addEqPic;
+    private JLabel availableEq;
+    private JLabel reportBtn;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AddEquipment frame = new AddEquipment();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    AddEquipment frame = new AddEquipment();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	/**
-	 * Create the frame.
-	 */
-	public AddEquipment() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 600);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    private void loadEquipmentData() {
+        try (BufferedReader br = new BufferedReader(new FileReader("Equipments.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length == 2) {
+                    String equipment = data[0].trim();
+                    int quantity = Integer.parseInt(data[1].trim());
+                    model.addRow(new Object[] { equipment, quantity });
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel adminChoice = new JLabel("");
-		adminChoice.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				AdminPage adminPage = new AdminPage();
-				adminPage.setVisible(true);
-				dispose();
-			}
-		});
-		adminChoice.setBounds(833, 0, 95, 26);
-		contentPane.add(adminChoice);
-		
-		JLabel logout = new JLabel("");
-		logout.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				dispose();
-			}
-		});
-		logout.setBounds(948, 0, 36, 26);
-		contentPane.add(logout);
-		
-		equipment = new JTextField();
-		equipment.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		equipment.setBackground(null);
-		equipment.setBorder(null);
-		equipment.setOpaque(false);
-		equipment.setBounds(123, 176, 190, 20);
-		contentPane.add(equipment);
-		equipment.setColumns(10);
-		
-		quantity = new JTextField();
-		quantity.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		quantity.setBackground(null);
-		quantity.setBorder(null);
-		quantity.setOpaque(false);
-		quantity.setBounds(471, 176, 86, 20);
-		contentPane.add(quantity);
-		quantity.setColumns(10);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 252, 895, 278);
-		contentPane.add(scrollPane);
-		
-		table = new JTable();
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int i = table.getSelectedRow();
-				equipment.setText(model.getValueAt(i, 0).toString());
-				quantity.setText(model.getValueAt(i, 1).toString());
-			}
-		});
-		model = new DefaultTableModel();
-		Object[] column = {"Equipment", "No. of Equipment"};
-		final Object[] row = new Object[2];
-		model.setColumnIdentifiers(column);
-		table.setModel(model);
-		table.setBackground(new Color(255, 255, 255));
-		scrollPane.setViewportView(table);
-		
-		JLabel addeqPic = new JLabel("");
-		addeqPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\AddEquipment.png"));
-		addeqPic.setBounds(0, 0, 984, 561);
-		contentPane.add(addeqPic);
-		
-		JLabel addBtn = new JLabel("");
-		addBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(equipment.getText().equals("") || quantity.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Please fill complete information.");
-				} else {
-					row[0] = equipment.getText();
-					row[1] = quantity.getText();
-					model.addRow(row);
-					
-					equipment.setText("");
-					quantity.setText("");
-					JOptionPane.showMessageDialog(null, "Saved Successfully!");
-				}
-			}
-		});
-		addBtn.setBounds(833, 162, 86, 34);
-		contentPane.add(addBtn);
-		
-		JLabel editBtn = new JLabel("");
-		editBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int i = table.getSelectedRow();
-				if (i>=0) {
-					model.setValueAt(equipment.getText(), i, 0);
-					model.setValueAt(quantity.getText(), i, 1);
-					JOptionPane.showMessageDialog(null, "Update Successful!");
-				} else {
-					JOptionPane.showMessageDialog(null, "Please select a row first.");
-				}
-			}
-		});
-		editBtn.setBounds(833, 207, 86, 26);
-		contentPane.add(editBtn);
-	}
+    private void saveEquipmentData() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("Equipments.txt"))) {
+            for (int i = 0; i < model.getRowCount(); i++) {
+                String equipment = model.getValueAt(i, 0).toString();
+                String quantity = model.getValueAt(i, 1).toString();
+                bw.write(equipment + "," + quantity);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    
+
+    public AddEquipment() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1000, 600);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        setVisible(true);
+        contentPane.setLayout(null);
+                
+               EqType = new JTextField();
+               EqType.setBounds(128, 196, 179, 20);
+               EqType.setFont(new Font("Times New Roman", Font.BOLD, 16));
+               EqType.setBackground(null);
+               EqType.setBorder(null);
+               EqType.setOpaque(false);
+               contentPane.add(EqType);
+               EqType.setColumns(10);
+        
+                NoOfEq = new JTextField();
+                NoOfEq.setBounds(469, 196, 93, 20);
+                NoOfEq.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+                NoOfEq.setBackground(null);
+                NoOfEq.setBorder(null);
+                NoOfEq.setOpaque(false);
+                contentPane.add(NoOfEq);
+                NoOfEq.setColumns(10);
+
+        model = new DefaultTableModel(
+                new Object[][] {},
+                new String[] { "Equipment", "Quantity" }
+        );
+
+        JLabel AdminBackBtn = new JLabel("");
+        AdminBackBtn.setBounds(827, 0, 102, 52);
+        AdminBackBtn.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                AdminPage AdmPg = new AdminPage();
+                AdmPg.setVisible(true);
+                dispose();
+            }
+        });
+        contentPane.add(AdminBackBtn);
+
+        JButton AddBtn = new JButton("");
+        AddBtn.setBounds(840, 184, 76, 32);
+        AddBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String equipment = EqType.getText();
+                String quantity = NoOfEq.getText();
+
+                if (!equipment.isEmpty() && !quantity.isEmpty()) {
+                    model.addRow(new Object[] { equipment, quantity });
+                    saveEquipmentData();
+                    EqType.setText("");
+                    NoOfEq.setText("");
+                    JOptionPane.showMessageDialog(contentPane, "Add successful");
+                } else {
+                    JOptionPane.showMessageDialog(contentPane, "Please complete fill up");
+                }
+            }
+        });
+        
+                scrollPane = new JScrollPane();
+                scrollPane.setBounds(72, 261, 739, 272);
+                contentPane.add(scrollPane);
+                table = new JTable(model);
+                table.addMouseListener(new MouseAdapter() {
+        			@Override
+        			public void mouseClicked(MouseEvent e) {
+        				int i = table.getSelectedRow();
+        				EqType.setText(model.getValueAt(i, 0).toString());
+        				NoOfEq.setText(model.getValueAt(i, 1).toString());
+        			}
+        		});
+                table.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
+                table.setBackground(new Color(128, 255, 128));
+                scrollPane.setViewportView(table);
+                table.setModel(model);
+        AddBtn.setOpaque(false);
+        AddBtn.setContentAreaFilled(false);
+        AddBtn.setBorderPainted(false);
+        contentPane.add(AddBtn);
+                
+                EditBtn = new JButton("");
+                EditBtn.setBounds(840, 227, 76, 23);
+                EditBtn.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        int selectedRow = table.getSelectedRow();
+                        int i = table.getSelectedRow();
+                        if (i >= 0) {
+                            model.setValueAt(EqType.getText(), i, 0);
+                            model.setValueAt(NoOfEq.getText(), i, 1);
+                            saveEquipmentData(); // Save the updated equipment data
+                            JOptionPane.showMessageDialog(null, "Update Successful!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Please select a row first.");
+                        }
+                    }
+                });               
+                EditBtn.setOpaque(false);
+                EditBtn.setContentAreaFilled(false);
+                EditBtn.setBorderPainted(false);
+                contentPane.add(EditBtn);
+                
+                addEqPic = new JLabel("");
+                addEqPic.setIcon(new ImageIcon("C:\\Users\\callv\\OneDrive\\Pictures\\Project\\addEq.png"));
+                addEqPic.setBounds(0, 0, 1000, 600);
+                contentPane.add(addEqPic);
+                
+                availableEq = new JLabel("");
+                availableEq.addMouseListener(new MouseAdapter() {
+                	@Override
+                	public void mouseClicked(MouseEvent e) {
+                		AvailableEquipment availEq = new AvailableEquipment();
+        				availEq.setVisible(true);
+        				dispose();
+                	}
+                });
+                availableEq.setBounds(192, 64, 247, 40);
+                contentPane.add(availableEq);
+                
+                reportBtn = new JLabel("");
+                reportBtn.addMouseListener(new MouseAdapter() {
+                	@Override
+                	public void mouseClicked(MouseEvent e) {
+                		Records records = new Records();
+        				records.setVisible(true);
+        				dispose();
+                	}
+                });
+                reportBtn.setBounds(442, 29, 256, 40);
+                contentPane.add(reportBtn);
+
+        loadEquipmentData(); // Call to load equipment data
+    }
+
 }
+
